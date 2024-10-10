@@ -44,11 +44,11 @@ class NitRouter {
 
   static GoRouter prepareRouter({
     required List<List<NavigationZoneEnum>> navigationZones,
-    required Listenable refreshListenable,
-    required NavigationZoneEnum? Function(
+    Listenable? refreshListenable,
+    NavigationZoneEnum? Function(
       BuildContext context,
       NavigationZoneEnum? route,
-    ) redirect,
+    )? redirect,
     // required SessionStateClass sessionState,
     // required NavigationZoneEnum<SessionStateClass> Function(SessionStateClass) home
   }) {
@@ -78,46 +78,56 @@ class NitRouter {
             ),
       ],
       refreshListenable: refreshListenable,
-      redirect: (context, state) {
-        final match =
-            state.uri.toString().split('/').whereNot((p) => p.isEmpty).first;
-        // final match = state.name;
+      redirect: redirect == null
+          ? null
+          : (context, state) {
+              final match = state.uri
+                  .toString()
+                  .split('/')
+                  .whereNot((p) => p.isEmpty)
+                  .first;
+              // final match = state.name;
 
-        // final currentZone = navigationZones.firstWhere(
-        //   (zone) => zone.any(
-        //     (route) {
-        //       return route.path.split('/').whereNot((p) => p.isEmpty).first ==
-        //           match;
-        //       //     state.uri
-        //       //         .toString()
-        //       //         .split('/')
-        //       //         .whereNot((p) => p.isEmpty)
-        //       //         .first;
-        //     },
-        //   ),
-        // );
+              // final currentZone = navigationZones.firstWhere(
+              //   (zone) => zone.any(
+              //     (route) {
+              //       return route.path.split('/').whereNot((p) => p.isEmpty).first ==
+              //           match;
+              //       //     state.uri
+              //       //         .toString()
+              //       //         .split('/')
+              //       //         .whereNot((p) => p.isEmpty)
+              //       //         .first;
+              //     },
+              //   ),
+              // );
 
-        final currentRoute = navigationZones.expand((e) => e).firstWhereOrNull(
-            (route) =>
-                route.path.split('/').whereNot((p) => p.isEmpty).first == match
-            //     state.uri
-            //         .toString()
-            //         .split('/')
-            //         .whereNot((p) => p.isEmpty)
-            //         .first;
+              final currentRoute = navigationZones
+                  .expand((e) => e)
+                  .firstWhereOrNull((route) =>
+                          route.path
+                              .split('/')
+                              .whereNot((p) => p.isEmpty)
+                              .first ==
+                          match
+                      //     state.uri
+                      //         .toString()
+                      //         .split('/')
+                      //         .whereNot((p) => p.isEmpty)
+                      //         .first;
 
-            );
+                      );
 
-        final res = redirect(context, currentRoute)?.path;
+              final res = redirect(context, currentRoute)?.path;
 
-        // if (currentZone.firstOrNull?.hasAccess(sessionState) ?? false) {
-        //   return null;
-        // }
+              // if (currentZone.firstOrNull?.hasAccess(sessionState) ?? false) {
+              //   return null;
+              // }
 
-        // final res2 = home(sessionState).path;
+              // final res2 = home(sessionState).path;
 
-        return res;
-      },
+              return res;
+            },
     );
   }
 }
