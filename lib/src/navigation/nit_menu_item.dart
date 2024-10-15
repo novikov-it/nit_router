@@ -7,11 +7,17 @@ import 'navigation_zone.dart';
 class NitMenuItem {
   NitMenuItem({
     required this.displayTitle,
-    required this.svgIcon,
+    this.iconData,
+    this.svgIcon,
     this.route,
     this.onPressed,
     this.displayProvider,
   }) {
+    assert(
+      (iconData != null || svgIcon != null) &&
+          (iconData == null || svgIcon == null),
+      'Either route or onPressed must be provided',
+    );
     assert(
       (route != null || onPressed != null) &&
           (route == null || onPressed == null),
@@ -23,6 +29,7 @@ class NitMenuItem {
   final Function(BuildContext, WidgetRef)? onPressed;
   final NavigationZoneEnum? route;
   final String displayTitle;
-  final String svgIcon;
+  final IconData? iconData;
+  final String? svgIcon;
   final ProviderListenable? displayProvider;
 }
