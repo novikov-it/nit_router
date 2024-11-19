@@ -3,7 +3,6 @@ library nit_router;
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
 import 'src/widget/not_found_page.dart';
 
 import 'src/navigation/navigation_zone.dart';
@@ -14,6 +13,7 @@ export 'src/navigation/nit_menu_item.dart';
 export 'src/navigation/nit_menu.dart';
 export 'src/navigation/default_navigation_mixin.dart';
 export 'src/navigation/common_navigation_parameters.dart';
+export 'src/ref_extensions.dart';
 export 'src/providers.dart';
 
 extension on NavigationZoneEnum {

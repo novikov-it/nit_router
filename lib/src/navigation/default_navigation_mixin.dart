@@ -14,8 +14,10 @@ mixin DefaultNavigationMixin<T> on Enum {
     }
 
     switch (T) {
-      case int:
+      case const (int):
         return int.parse(value) as T;
+      case const (String):
+        return value as T;
 
       default:
         try {
