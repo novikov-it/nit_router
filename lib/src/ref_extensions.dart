@@ -7,10 +7,18 @@ extension WidgetRefNavigationExtension on WidgetRef {
   T? watchNavigationParam<T>(DefaultNavigationMixin<T> param) => param.get(
         watch(navigationPathParametersProvider),
       );
+
+  T? readNavigationParam<T>(DefaultNavigationMixin<T> param) => param.get(
+        read(navigationPathParametersProvider),
+      );
 }
 
 extension RefNavigationExtension on Ref {
   T? watchNavigationParam<T>(DefaultNavigationMixin<T> param) => param.get(
         watch(navigationPathParametersProvider),
+      );
+
+  T? readNavigationParam<T>(DefaultNavigationMixin<T> param) => param.get(
+        read(navigationPathParametersProvider),
       );
 }
