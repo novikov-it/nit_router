@@ -2,9 +2,7 @@ library nit_router;
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:nit_router/src/domain/nit_redirects_model.dart';
 import 'src/widget/not_found_page.dart';
 
 import 'src/navigation/navigation_zone.dart';
@@ -29,34 +27,34 @@ class NitRouter {
 
   // static GoRouter? _previousRouter;
 
-  static prepareRouterProvider({
-    required List<List<NavigationZoneEnum>> navigationZones,
-    // required Provider<Map<NavigationZoneEnum, NavigationZoneEnum>>?
-    required Provider<NitRedirectsStateModel>? redirectProvider,
-  }) =>
-      Provider((ref) {
-        final redirects =
-            redirectProvider != null ? ref.watch(redirectProvider) : null;
-        print(redirects);
-        // final t = _previousRouter;
+  // static prepareRouterProvider({
+  //   required List<List<NavigationZoneEnum>> navigationZones,
+  //   // required Provider<Map<NavigationZoneEnum, NavigationZoneEnum>>?
+  //   required Provider<NitRedirectsStateModel>? redirectProvider,
+  // }) =>
+  //     Provider((ref) {
+  //       final redirects =
+  //           redirectProvider != null ? ref.watch(redirectProvider) : null;
+  //       print(redirects);
+  //       // final t = _previousRouter;
 
-        // final t2 =
-        //     _previousRouter?.routerDelegate.currentConfiguration.uri.toString();
-        final t3 = navigationZones.first.first.path;
+  //       // final t2 =
+  //       //     _previousRouter?.routerDelegate.currentConfiguration.uri.toString();
+  //       // final t3 = navigationZones.first.first.path;
 
-        return
-            //  _previousRouter =
-            NitRouter.prepareRouter(
-          // navigatorKey: navigatorKey,
-          // initialLocation: _previousRouter
-          //     ?.routerDelegate.currentConfiguration.uri
-          //     .toString(),
-          navigationZones: navigationZones,
-          redirect: (context, route) {
-            return redirects?.redirects[route];
-          },
-        );
-      });
+  //       return
+  //           //  _previousRouter =
+  //           NitRouter.prepareRouter(
+  //         // navigatorKey: navigatorKey,
+  //         // initialLocation: _previousRouter
+  //         //     ?.routerDelegate.currentConfiguration.uri
+  //         //     .toString(),
+  //         navigationZones: navigationZones,
+  //         redirect: (context, route) {
+  //           return redirects?.redirects[route];
+  //         },
+  //       );
+  //     });
 
   static GoRoute _buildRoute(
     NavigationZoneEnum route,

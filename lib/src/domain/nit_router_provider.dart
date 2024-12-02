@@ -13,6 +13,8 @@ part 'nit_router_provider.g.dart';
 
 @riverpod
 class NitRouterState extends _$NitRouterState {
+  GoRouter? _previousRouter;
+
   @override
   GoRouter build(
     List<List<NavigationZoneEnum>> navigationZones,
@@ -20,20 +22,17 @@ class NitRouterState extends _$NitRouterState {
   ) {
     final redirects =
         redirectProvider != null ? ref.watch(redirectProvider) : null;
-    print(redirects);
+    // print(redirects);
     // final t = _previousRouter;
 
     // final t2 =
     //     _previousRouter?.routerDelegate.currentConfiguration.uri.toString();
     // final t3 = navigationZones.first.first.path;
 
-    return
-        //  _previousRouter =
-        NitRouter.prepareRouter(
+    return _previousRouter = NitRouter.prepareRouter(
       // navigatorKey: navigatorKey,
-      // initialLocation: _previousRouter
-      //     ?.routerDelegate.currentConfiguration.uri
-      //     .toString(),
+      initialLocation:
+          _previousRouter?.routerDelegate.currentConfiguration.uri.toString(),
       navigationZones: navigationZones,
       redirect: (context, route) {
         return redirects?.redirects[route];
