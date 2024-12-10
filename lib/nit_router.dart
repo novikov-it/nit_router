@@ -58,18 +58,24 @@ class NitRouter {
 
   static GoRoute _buildRoute(
     NavigationZoneEnum route,
-    List<NavigationZoneEnum> zone,
+    List<List<NavigationZoneEnum>> zones,
   ) {
     return GoRoute(
       path: route.path,
       name: route.name,
       pageBuilder: route.pageBuilder,
-      routes: zone
-          .where((e) => e.route.parent == route)
-          .map(
-            (e) => _buildRoute(e, zone),
-          )
+      routes: zones
+          .map((zone) => zone
+              .where((e) => e.route.parent == route)
+              .map(
+                (e) => _buildRoute(e, zones),
+              )
+              .toList())
+          .expand((x) => x)
           .toList(),
+
+      //  zones.where((zone) =>
+      //     ).expand((x) => x).toList(),
     );
   }
 
@@ -102,7 +108,7 @@ class NitRouter {
               (zone) => zone.where((e) => e.route.parent == null).map(
                     (route) => _buildRoute(
                       route,
-                      zone,
+                      navigationZones,
                     ),
                   ),
             )
