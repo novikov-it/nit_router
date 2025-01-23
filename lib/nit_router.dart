@@ -1,6 +1,5 @@
 library nit_router;
 
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'src/widget/not_found_page.dart';
@@ -18,8 +17,11 @@ export 'src/providers.dart';
 export 'src/domain/nit_redirects_model.dart';
 export 'src/domain/nit_router_provider.dart';
 
-extension on NavigationZoneEnum {
-  String get path => '${route.parent == null ? root : ''}${route.path}';
+extension NavigationZoneExtension on NavigationZoneEnum {
+  String get path =>
+      '${route.parent == null ? '/$root${root != '' && route.path != '' ? '/' : ''}' : ''}${route.path}';
+  String get fullPath =>
+      route.parent == null ? path : '${route.parent!.fullPath}/${route.path}';
 }
 
 class NitRouter {
@@ -120,22 +122,62 @@ class NitRouter {
       redirect: redirect == null
           ? null
           : (context, state) {
-              final match = state.uri
-                  .toString()
-                  .split('/')
-                  .whereNot((p) => p.isEmpty)
-                  .first;
+              // final match = state.uri
+              //         .toString()
+              //         .split('/')
+              //         .whereNot((p) => p.isEmpty)
+              //         .firstOrNull ??
+              //     '';
 
-              final currentRoute = navigationZones
-                  .expand((e) => e)
-                  .firstWhereOrNull((route) =>
-                      route.path.split('/').whereNot((p) => p.isEmpty).first ==
-                      match);
+              // final currentRoute = navigationZones
+              //     .expand((e) => e)
+              //     .firstWhereOrNull((route) =>
+              //         route.path.split('/').whereNot((p) => p.isEmpty).first ==
+              //         match);
+              final currentRoute = _getCurrentRoute(
+                  state.uri, navigationZones.expand((e) => e).toList());
 
               final res = redirect(context, currentRoute)?.path;
 
               return res;
             },
     );
+  }
+
+  static _getCurrentRoute(
+    Uri currentUri,
+    List<NavigationZoneEnum> navigationRoutes,
+  ) {
+    final urlSections = currentUri.toString().split('?')[0].split('/');
+    // print(urlSections);
+    final currentRoute = navigationRoutes.firstWhere((element) {
+      // print('${element.route!.root}${element.route!.route.path}');
+
+      final routeSections = element.fullPath.split('/');
+
+      for (var i = 0; i < urlSections.length; i++) {
+        if (i >= routeSections.length) {
+          // print('${urlSections[i]} does not match ${routeSections[i]}');
+
+          return false;
+        }
+        if (routeSections[i].startsWith(':') ||
+            urlSections[i] == routeSections[i]) {
+          // print('${urlSections[i]} matches ${routeSections[i]}');
+          continue;
+        } else {
+          // print('${urlSections[i]} does not match ${routeSections[i]}');
+
+          return false;
+        }
+      }
+
+      return true;
+
+      // return GoRouterState.of(context).uri.toString().contains(
+      //     '${element.route!.root}${element.route!.route.path}'); //TODO: fix location here
+    });
+
+    return currentRoute;
   }
 }

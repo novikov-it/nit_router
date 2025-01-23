@@ -13,15 +13,18 @@ Page<dynamic> navigationPageBuilder({
   Widget Function(Widget child)? wrapper,
   List<Override> overrides = const [],
 }) {
+  // ProviderScope.containerOf(context)
+  //     .read(navigationPathParametersProvider.notifier)
+  //     .state = state.pathParameters;
   return FadeTransitionPage(
     child: ProviderScope(
       overrides: [
         navigationPathParametersProvider.overrideWithValue(
           state.pathParameters,
         ),
-        navigationExtraParameterProvider.overrideWithValue(
-          state.extra,
-        ),
+        // navigationExtraParameterProvider.overrideWithValue(
+        //   state.extra,
+        // ),
         ...overrides,
       ],
       child: wrapper != null ? wrapper(route.page) : route.page,

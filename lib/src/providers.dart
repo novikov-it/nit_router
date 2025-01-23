@@ -1,3 +1,4 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'providers.g.dart';
@@ -6,6 +7,10 @@ part 'providers.g.dart';
 Map<String, String> navigationPathParameters(NavigationPathParametersRef ref) {
   return const {};
 }
+
+// final navigationPathParametersProvider = StateProvider<Map<String, String>>(
+//   (ref) => {},
+// );
 
 @Riverpod(dependencies: [])
 Object? navigationExtraParameter(NavigationExtraParameterRef ref) {
