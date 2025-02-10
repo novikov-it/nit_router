@@ -1,7 +1,7 @@
 name: nit_router
-description: "A new Flutter package project."
+description: "Go Router wrapper with easy routes configuration and convenience classes for navigation"
 version: 0.0.1
-homepage:
+homepage: https://github.com/novikov-it/nit_router
 
 environment:
   sdk: '>=3.4.1 <4.0.0'
@@ -16,6 +16,7 @@ dependencies:
   flutter_riverpod: ^2.4.10
   riverpod_annotation: ^2.3.4
   freezed_annotation: ^2.4.4
+  flutter_svg: ^2.0.17
 
 
 dev_dependencies:
