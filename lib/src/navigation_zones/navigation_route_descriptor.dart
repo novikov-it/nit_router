@@ -21,23 +21,23 @@ class SimpleNavigationRouteDescriptor extends NavigationRouteDescriptor {
   });
 }
 
+const String nitParameterSubstitutionPattern =
+    'nitParameterSubstitutionPattern';
+
 class ParameterizedNavigationRouteDescriptor<ParameterType>
     extends NavigationRouteDescriptor {
-  static const String parameterSubstitutionPattern =
-      'parameterSubstitutionPattern';
-
   const ParameterizedNavigationRouteDescriptor({
     required super.page,
     required this.parameter,
     super.parent,
-    this.pathSegmentTemplate = parameterSubstitutionPattern,
+    this.pathSegmentTemplate = nitParameterSubstitutionPattern,
   });
   final NavigationParamsMixin<ParameterType> parameter;
   final String pathSegmentTemplate;
 
   @override
   String get path => pathSegmentTemplate.replaceFirst(
-        parameterSubstitutionPattern,
+        nitParameterSubstitutionPattern,
         ':${parameter.name}',
       );
 }
