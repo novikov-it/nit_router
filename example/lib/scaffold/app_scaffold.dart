@@ -1,6 +1,5 @@
 import 'package:example/router/router.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nit_router/nit_router.dart';
 
@@ -20,14 +19,14 @@ class AppScaffold extends ConsumerWidget {
       appBar: AppBar(
         title: Text(pageTitle),
       ),
-      bottomNavigationBar: NitBottomNavigationBar(
+      bottomNavigationBar: const NitBottomNavigationBar(
         menuItems: [
-          NitMenuItem(
+          NitMenuItem.icon(
             route: AppNavigationZone.home,
             displayTitle: 'Home',
             iconData: Icons.home,
           ),
-          NitMenuItem(
+          NitMenuItem.icon(
             route: AppNavigationZone.catalog,
             displayTitle: 'Catalog',
             iconData: Icons.shop_2_sharp,

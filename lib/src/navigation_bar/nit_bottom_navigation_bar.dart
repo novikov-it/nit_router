@@ -75,8 +75,8 @@ class _MainNavigationBarState extends ConsumerState<NitBottomNavigationBar> {
       unselectedItemColor: Theme.of(context).colorScheme.outline,
       selectedItemColor: Theme.of(context).colorScheme.primaryFixedDim,
       onTap: (index) {
-        if (widget.menuItems[index].onPressed != null) {
-          widget.menuItems[index].onPressed!(context, ref);
+        if (widget.menuItems[index].customOnPressed != null) {
+          widget.menuItems[index].customOnPressed!(context, ref);
         } else if (widget.menuItems[index].route != null) {
           context.goNamed(
             widget.menuItems[index].route!.name,

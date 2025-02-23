@@ -1,33 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../navigation_zones/navigation_zone_route.dart';
 
 class NitMenuItem {
-  NitMenuItem({
+  const NitMenuItem.svg({
+    required this.route,
     required this.displayTitle,
-    this.iconData,
-    this.svgIcon,
-    this.route,
-    this.onPressed,
+    required this.svgIcon,
+    this.customOnPressed,
     this.displayProvider,
-  }) {
-    assert(
-      (iconData != null || svgIcon != null) &&
-          (iconData == null || svgIcon == null),
-      'Either route or onPressed must be provided',
-    );
-    assert(
-      (route != null || onPressed != null) &&
-          (route == null || onPressed == null),
-      'Either route or onPressed must be provided',
-    );
-  }
+  }) : iconData = null;
 
-  /// This function must handle notifying itself
-  final Function(BuildContext, WidgetRef)? onPressed;
+  const NitMenuItem.icon({
+    required this.route,
+    required this.displayTitle,
+    required this.iconData,
+    this.customOnPressed,
+    this.displayProvider,
+  }) : svgIcon = null;
+
   final NavigationZoneRoute? route;
   final String displayTitle;
   final IconData? iconData;
   final String? svgIcon;
+  final Function(BuildContext, WidgetRef)? customOnPressed;
   final ProviderListenable? displayProvider;
 }

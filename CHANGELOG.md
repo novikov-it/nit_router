@@ -1,3 +1,6 @@
+## 0.1.0
+Changed NitMenuItem - removed asserts, changed constructors
+
 ## 0.0.3
 Bugfix in nit_bottom_navigation_bar for menu items having action instead of route.
 
