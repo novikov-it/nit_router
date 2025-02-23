@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+
 import '../navigation_zones/navigation_zone_route.dart';
 import 'nit_menu_item.dart';
 
@@ -32,6 +33,8 @@ class _MainNavigationBarState extends ConsumerState<NitBottomNavigationBar> {
       final urlSections =
           GoRouterState.of(context).uri.toString().split('?')[0].split('/');
       _currentIndex = widget.menuItems.indexWhere((element) {
+        if (element.route == null) return false;
+
         final routeSections = element.route!.fullPath.split('/');
 
         for (var i = 0; i < urlSections.length; i++) {
