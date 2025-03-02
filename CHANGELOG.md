@@ -1,3 +1,6 @@
+## 0.2.0
+Changed NitBottomNavigationBar to enable UI customization
+
 ## 0.1.0
 Changed NitMenuItem - removed asserts, changed constructors
 

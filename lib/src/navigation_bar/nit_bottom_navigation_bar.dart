@@ -11,11 +11,66 @@ class NitBottomNavigationBar extends ConsumerStatefulWidget {
   const NitBottomNavigationBar({
     super.key,
     required this.menuItems,
+    this.bottomNavigationBarTheme,
+    this.itemBuilder = defaultItemBuilder,
     this.pathParameters,
   });
 
   final List<NitMenuItem> menuItems;
+  final BottomNavigationBarThemeData? bottomNavigationBarTheme;
+  final BottomNavigationBarItem Function(
+    BuildContext context,
+    WidgetRef ref,
+    NitMenuItem item,
+    bool isActive,
+  ) itemBuilder;
   final Map<String, String>? pathParameters;
+
+  static BottomNavigationBarItem defaultItemBuilder(
+    BuildContext context,
+    WidgetRef ref,
+    NitMenuItem item,
+    bool isActive,
+  ) =>
+      BottomNavigationBarItem(
+        icon: Stack(
+          children: [
+            item.svgIcon != null
+                ? SvgPicture.asset(
+                    item.svgIcon!,
+                    colorFilter: ColorFilter.mode(
+                      isActive
+                          ? Theme.of(context).colorScheme.primaryFixedDim
+                          : Theme.of(context).colorScheme.outline,
+                      BlendMode.srcIn,
+                    ),
+                  )
+                : Icon(item.iconData),
+            if (item.displayProvider != null)
+              Builder(
+                builder: (context) {
+                  final state = ref.watch(item.displayProvider!);
+
+                  if (state is int && state > 0) {
+                    return Padding(
+                      padding: const EdgeInsets.fromLTRB(24, 0, 0, 0),
+                      child: Text(
+                        '$state',
+                        style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                              color: Theme.of(context).colorScheme.error,
+                              fontWeight: FontWeight.w600,
+                            ),
+                      ),
+                    );
+                  }
+
+                  return const SizedBox.shrink();
+                },
+              ),
+          ],
+        ),
+        label: item.displayTitle,
+      );
 
   @override
   ConsumerState<NitBottomNavigationBar> createState() =>
@@ -60,76 +115,40 @@ class _MainNavigationBarState extends ConsumerState<NitBottomNavigationBar> {
 
   @override
   Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      currentIndex: _currentIndex,
-      elevation: 0,
-      backgroundColor: Theme.of(context).colorScheme.surfaceContainerLowest,
-      selectedLabelStyle: Theme.of(context).textTheme.bodySmall!.copyWith(
-            color: Theme.of(context).colorScheme.secondary.withOpacity(0.50),
-            fontSize: 12,
-          ),
-      unselectedLabelStyle: Theme.of(context).textTheme.bodySmall!.copyWith(
-            color: Theme.of(context).colorScheme.secondary.withOpacity(0.50),
-            fontSize: 12,
-          ),
-      unselectedItemColor: Theme.of(context).colorScheme.outline,
-      selectedItemColor: Theme.of(context).colorScheme.primaryFixedDim,
-      onTap: (index) {
-        if (widget.menuItems[index].customOnPressed != null) {
-          widget.menuItems[index].customOnPressed!(context, ref);
-        } else if (widget.menuItems[index].route != null) {
-          context.goNamed(
-            widget.menuItems[index].route!.name,
-            pathParameters: widget.pathParameters ?? {},
-          );
-        }
-      },
-      items: widget.menuItems.mapIndexed(
-        (index, item) {
-          return BottomNavigationBarItem(
-            icon: Stack(
-              children: [
-                item.svgIcon != null
-                    ? SvgPicture.asset(
-                        item.svgIcon!,
-                        colorFilter: ColorFilter.mode(
-                          _currentIndex == index
-                              ? Theme.of(context).colorScheme.primaryFixedDim
-                              : Theme.of(context).colorScheme.outline,
-                          BlendMode.srcIn,
-                        ),
-                      )
-                    : Icon(item.iconData),
-                if (item.displayProvider != null)
-                  Builder(
-                    builder: (context) {
-                      final state = ref.watch(item.displayProvider!);
-
-                      if (state is int && state > 0) {
-                        return Padding(
-                          padding: const EdgeInsets.fromLTRB(24, 0, 0, 0),
-                          child: Text(
-                            '$state',
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelLarge!
-                                .copyWith(
-                                  color: Theme.of(context).colorScheme.error,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                          ),
-                        );
-                      }
-
-                      return const SizedBox.shrink();
-                    },
-                  ),
-              ],
-            ),
-            label: item.displayTitle,
-          );
+    return BottomNavigationBarTheme(
+      data: widget.bottomNavigationBarTheme ??
+          Theme.of(context).bottomNavigationBarTheme,
+      child: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        elevation: 0,
+        // backgroundColor: Theme.of(context).colorScheme.surfaceContainerLowest,
+        // selectedLabelStyle: Theme.of(context).textTheme.bodySmall!.copyWith(
+        //       color: Theme.of(context).colorScheme.secondary.withOpacity(0.50),
+        //       fontSize: 12,
+        //     ),
+        // unselectedLabelStyle: Theme.of(context).textTheme.bodySmall!.copyWith(
+        //       color: Theme.of(context).colorScheme.secondary.withOpacity(0.50),
+        //       fontSize: 12,
+        //     ),
+        // unselectedItemColor: Theme.of(context).colorScheme.outline,
+        // selectedItemColor: Theme.of(context).colorScheme.primaryFixedDim,
+        onTap: (index) {
+          if (widget.menuItems[index].customOnPressed != null) {
+            widget.menuItems[index].customOnPressed!(context, ref);
+          } else if (widget.menuItems[index].route != null) {
+            context.goNamed(
+              widget.menuItems[index].route!.name,
+              pathParameters: widget.pathParameters ?? {},
+            );
+          }
         },
-      ).toList(),
+        items: widget.menuItems
+            .mapIndexed(
+              (index, item) => widget.itemBuilder(
+                  context, ref, item, index == _currentIndex),
+            )
+            .toList(),
+      ),
     );
   }
 }
