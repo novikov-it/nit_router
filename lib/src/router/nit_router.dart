@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+
 import '../navigation_params/navigation_parameters_providers.dart';
 import '../navigation_zones/navigation_zone_route.dart';
 
 class NitRouter {
+  static bool skipZoneInRouteNames = true;
+
   static final _routerKey =
       GlobalKey<NavigatorState>(debugLabel: 'nitRouterKey');
+
+  static configure({
+    required bool skipZoneInRouteNames,
+  }) {
+    NitRouter.skipZoneInRouteNames = skipZoneInRouteNames;
+  }
 
   static GoRouter prepareRouter({
     required List<List<NavigationZoneRoute>> navigationZones,

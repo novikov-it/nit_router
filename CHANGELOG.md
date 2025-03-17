@@ -1,3 +1,8 @@
+## 0.3.0
+Added configuration options and 1 parameter skipZoneInRouteNames (default true)
+If true than Zone name is not included in route names.
+name property is overriden in order to support this parameter without any hassle
+
 ## 0.2.0
 Changed NitBottomNavigationBar to enable UI customization
 
