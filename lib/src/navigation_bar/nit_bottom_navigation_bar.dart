@@ -14,6 +14,9 @@ class NitBottomNavigationBar extends ConsumerStatefulWidget {
     this.bottomNavigationBarTheme,
     this.itemBuilder = defaultItemBuilder,
     this.pathParameters,
+    this.showSelectedLabels,
+    this.showUnselectedLabels,
+    this.type,
   });
 
   final List<NitMenuItem> menuItems;
@@ -25,6 +28,9 @@ class NitBottomNavigationBar extends ConsumerStatefulWidget {
     bool isActive,
   ) itemBuilder;
   final Map<String, String>? pathParameters;
+  final bool? showSelectedLabels;
+  final bool? showUnselectedLabels;
+  final BottomNavigationBarType? type;
 
   static BottomNavigationBarItem defaultItemBuilder(
     BuildContext context,
@@ -142,6 +148,9 @@ class _MainNavigationBarState extends ConsumerState<NitBottomNavigationBar> {
             );
           }
         },
+        showSelectedLabels: widget.showSelectedLabels,
+        showUnselectedLabels: widget.showUnselectedLabels,
+        type: widget.type,
         items: widget.menuItems
             .mapIndexed(
               (index, item) => widget.itemBuilder(
