@@ -1,3 +1,6 @@
+## 0.3.1
+Added navigationPathParametersProvider and navigationExtraParameterProvider to module exports
+
 ## 0.3.0
 Added configuration options and 1 parameter skipZoneInRouteNames (default true)
 If true than Zone name is not included in route names.
