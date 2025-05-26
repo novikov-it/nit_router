@@ -22,7 +22,6 @@ class NitBottomNavigationBar extends ConsumerStatefulWidget {
   final List<NitMenuItem> menuItems;
   final BottomNavigationBarThemeData? bottomNavigationBarTheme;
   final BottomNavigationBarItem Function(
-    BuildContext context,
     WidgetRef ref,
     NitMenuItem item,
     bool isActive,
@@ -33,7 +32,6 @@ class NitBottomNavigationBar extends ConsumerStatefulWidget {
   final BottomNavigationBarType? type;
 
   static BottomNavigationBarItem defaultItemBuilder(
-    BuildContext context,
     WidgetRef ref,
     NitMenuItem item,
     bool isActive,
@@ -46,8 +44,8 @@ class NitBottomNavigationBar extends ConsumerStatefulWidget {
                     item.svgIcon!,
                     colorFilter: ColorFilter.mode(
                       isActive
-                          ? Theme.of(context).colorScheme.primaryFixedDim
-                          : Theme.of(context).colorScheme.outline,
+                          ? Theme.of(ref.context).colorScheme.primaryFixedDim
+                          : Theme.of(ref.context).colorScheme.outline,
                       BlendMode.srcIn,
                     ),
                   )
@@ -139,14 +137,15 @@ class _MainNavigationBarState extends ConsumerState<NitBottomNavigationBar> {
         // unselectedItemColor: Theme.of(context).colorScheme.outline,
         // selectedItemColor: Theme.of(context).colorScheme.primaryFixedDim,
         onTap: (index) {
-          if (widget.menuItems[index].customOnPressed != null) {
-            widget.menuItems[index].customOnPressed!(context, ref);
-          } else if (widget.menuItems[index].route != null) {
-            context.goNamed(
-              widget.menuItems[index].route!.name,
-              pathParameters: widget.pathParameters ?? {},
-            );
-          }
+          ref.menuItemTap(widget.menuItems[index]);
+          // if (widget.menuItems[index].customOnPressed != null) {
+          //   widget.menuItems[index].customOnPressed!(ref);
+          // } else if (widget.menuItems[index].route != null) {
+          //   context.goNamed(
+          //     widget.menuItems[index].route!.name,
+          //     pathParameters: widget.pathParameters ?? {},
+          //   );
+          // }
         },
         showSelectedLabels: widget.showSelectedLabels,
         showUnselectedLabels: widget.showUnselectedLabels,
@@ -154,7 +153,10 @@ class _MainNavigationBarState extends ConsumerState<NitBottomNavigationBar> {
         items: widget.menuItems
             .mapIndexed(
               (index, item) => widget.itemBuilder(
-                  context, ref, item, index == _currentIndex),
+                ref,
+                item,
+                index == _currentIndex,
+              ),
             )
             .toList(),
       ),
