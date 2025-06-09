@@ -6,7 +6,7 @@ part of 'nit_router_state.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$nitRouterStateHash() => r'58a7d08faa75211cb54ff20f30117f87aac55c28';
+String _$nitRouterStateHash() => r'037989d874f31c82a752e75a86362b7620fe997e';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -32,10 +32,13 @@ class _SystemHash {
 abstract class _$NitRouterState extends BuildlessAutoDisposeNotifier<GoRouter> {
   late final List<List<NavigationZoneRoute>> navigationZones;
   late final Provider<RedirectsStateModel>? redirectsProvider;
+  late final NavigationZoneRoute? Function(BuildContext, GoRouterState)?
+      manualRedirect;
 
   GoRouter build({
     required List<List<NavigationZoneRoute>> navigationZones,
     Provider<RedirectsStateModel>? redirectsProvider,
+    NavigationZoneRoute? Function(BuildContext, GoRouterState)? manualRedirect,
   });
 }
 
@@ -52,10 +55,12 @@ class NitRouterStateFamily extends Family<GoRouter> {
   NitRouterStateProvider call({
     required List<List<NavigationZoneRoute>> navigationZones,
     Provider<RedirectsStateModel>? redirectsProvider,
+    NavigationZoneRoute? Function(BuildContext, GoRouterState)? manualRedirect,
   }) {
     return NitRouterStateProvider(
       navigationZones: navigationZones,
       redirectsProvider: redirectsProvider,
+      manualRedirect: manualRedirect,
     );
   }
 
@@ -66,6 +71,7 @@ class NitRouterStateFamily extends Family<GoRouter> {
     return call(
       navigationZones: provider.navigationZones,
       redirectsProvider: provider.redirectsProvider,
+      manualRedirect: provider.manualRedirect,
     );
   }
 
@@ -91,10 +97,12 @@ class NitRouterStateProvider
   NitRouterStateProvider({
     required List<List<NavigationZoneRoute>> navigationZones,
     Provider<RedirectsStateModel>? redirectsProvider,
+    NavigationZoneRoute? Function(BuildContext, GoRouterState)? manualRedirect,
   }) : this._internal(
           () => NitRouterState()
             ..navigationZones = navigationZones
-            ..redirectsProvider = redirectsProvider,
+            ..redirectsProvider = redirectsProvider
+            ..manualRedirect = manualRedirect,
           from: nitRouterStateProvider,
           name: r'nitRouterStateProvider',
           debugGetCreateSourceHash:
@@ -106,6 +114,7 @@ class NitRouterStateProvider
               NitRouterStateFamily._allTransitiveDependencies,
           navigationZones: navigationZones,
           redirectsProvider: redirectsProvider,
+          manualRedirect: manualRedirect,
         );
 
   NitRouterStateProvider._internal(
@@ -117,10 +126,13 @@ class NitRouterStateProvider
     required super.from,
     required this.navigationZones,
     required this.redirectsProvider,
+    required this.manualRedirect,
   }) : super.internal();
 
   final List<List<NavigationZoneRoute>> navigationZones;
   final Provider<RedirectsStateModel>? redirectsProvider;
+  final NavigationZoneRoute? Function(BuildContext, GoRouterState)?
+      manualRedirect;
 
   @override
   GoRouter runNotifierBuild(
@@ -129,6 +141,7 @@ class NitRouterStateProvider
     return notifier.build(
       navigationZones: navigationZones,
       redirectsProvider: redirectsProvider,
+      manualRedirect: manualRedirect,
     );
   }
 
@@ -139,7 +152,8 @@ class NitRouterStateProvider
       override: NitRouterStateProvider._internal(
         () => create()
           ..navigationZones = navigationZones
-          ..redirectsProvider = redirectsProvider,
+          ..redirectsProvider = redirectsProvider
+          ..manualRedirect = manualRedirect,
         from: from,
         name: null,
         dependencies: null,
@@ -147,6 +161,7 @@ class NitRouterStateProvider
         debugGetCreateSourceHash: null,
         navigationZones: navigationZones,
         redirectsProvider: redirectsProvider,
+        manualRedirect: manualRedirect,
       ),
     );
   }
@@ -160,7 +175,8 @@ class NitRouterStateProvider
   bool operator ==(Object other) {
     return other is NitRouterStateProvider &&
         other.navigationZones == navigationZones &&
-        other.redirectsProvider == redirectsProvider;
+        other.redirectsProvider == redirectsProvider &&
+        other.manualRedirect == manualRedirect;
   }
 
   @override
@@ -168,17 +184,24 @@ class NitRouterStateProvider
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
     hash = _SystemHash.combine(hash, navigationZones.hashCode);
     hash = _SystemHash.combine(hash, redirectsProvider.hashCode);
+    hash = _SystemHash.combine(hash, manualRedirect.hashCode);
 
     return _SystemHash.finish(hash);
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin NitRouterStateRef on AutoDisposeNotifierProviderRef<GoRouter> {
   /// The parameter `navigationZones` of this provider.
   List<List<NavigationZoneRoute>> get navigationZones;
 
   /// The parameter `redirectsProvider` of this provider.
   Provider<RedirectsStateModel>? get redirectsProvider;
+
+  /// The parameter `manualRedirect` of this provider.
+  NavigationZoneRoute? Function(BuildContext, GoRouterState)?
+      get manualRedirect;
 }
 
 class _NitRouterStateProviderElement
@@ -192,6 +215,9 @@ class _NitRouterStateProviderElement
   @override
   Provider<RedirectsStateModel>? get redirectsProvider =>
       (origin as NitRouterStateProvider).redirectsProvider;
+  @override
+  NavigationZoneRoute? Function(BuildContext, GoRouterState)?
+      get manualRedirect => (origin as NitRouterStateProvider).manualRedirect;
 }
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

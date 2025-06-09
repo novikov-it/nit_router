@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../navigation_zones/navigation_zone_route.dart';
@@ -15,6 +16,10 @@ class NitRouterState extends _$NitRouterState {
   GoRouter build({
     required List<List<NavigationZoneRoute>> navigationZones,
     Provider<RedirectsStateModel>? redirectsProvider,
+    NavigationZoneRoute? Function(
+      BuildContext context,
+      GoRouterState state,
+    )? manualRedirect,
   }) {
     final redirects =
         redirectsProvider != null ? ref.watch(redirectsProvider) : null;
@@ -27,6 +32,7 @@ class NitRouterState extends _$NitRouterState {
       ),
       initialLocation:
           _previousRouter?.routerDelegate.currentConfiguration.uri.toString(),
+      manualRedirect: manualRedirect,
       redirect: (context, route) {
         return redirects?.redirects[route];
       },
