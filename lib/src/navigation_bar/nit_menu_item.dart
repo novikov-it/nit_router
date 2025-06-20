@@ -23,22 +23,31 @@ class NitMenuItem {
     required this.route,
     required this.displayTitle,
     required this.svgIcon,
+    this.activeSvgIcon,
     this.customOnPressed,
     this.displayProvider,
-  }) : iconData = null;
+    this.changeIconColor = true,
+  })  : iconData = null,
+        activeIconData = null;
 
   const NitMenuItem.icon({
     required this.route,
     required this.displayTitle,
     required this.iconData,
+    this.activeIconData,
     this.customOnPressed,
     this.displayProvider,
-  }) : svgIcon = null;
+  })  : svgIcon = null,
+        activeSvgIcon = null,
+        changeIconColor = false;
 
   final NavigationZoneRoute? route;
   final String displayTitle;
   final IconData? iconData;
   final String? svgIcon;
+  final IconData? activeIconData;
+  final String? activeSvgIcon;
   final Function(WidgetRef)? customOnPressed;
   final ProviderListenable? displayProvider;
+  final bool changeIconColor;
 }

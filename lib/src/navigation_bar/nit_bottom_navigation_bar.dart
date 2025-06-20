@@ -35,46 +35,60 @@ class NitBottomNavigationBar extends ConsumerStatefulWidget {
     WidgetRef ref,
     NitMenuItem item,
     bool isActive,
-  ) =>
-      BottomNavigationBarItem(
-        icon: Stack(
-          children: [
-            item.svgIcon != null
-                ? SvgPicture.asset(
-                    item.svgIcon!,
-                    colorFilter: ColorFilter.mode(
-                      isActive
-                          ? Theme.of(ref.context).colorScheme.primaryFixedDim
-                          : Theme.of(ref.context).colorScheme.outline,
-                      BlendMode.srcIn,
+  ) {
+    return BottomNavigationBarItem(
+      icon: Stack(
+        children: [
+          item.svgIcon != null
+              ? SvgPicture.asset(
+                  placeholderBuilder: (context) => const SizedBox.square(
+                    dimension: 24,
+                  ),
+                  isActive
+                      ? item.activeSvgIcon ?? item.svgIcon!
+                      : item.svgIcon!,
+                  colorFilter: item.changeIconColor
+                      ? ColorFilter.mode(
+                          isActive
+                              ? Theme.of(ref.context)
+                                  .colorScheme
+                                  .primaryFixedDim
+                              : Theme.of(ref.context).colorScheme.outline,
+                          BlendMode.srcIn,
+                        )
+                      : null,
+                )
+              : Icon(
+                  isActive
+                      ? item.activeIconData ?? item.iconData!
+                      : item.iconData!,
+                ),
+          if (item.displayProvider != null)
+            Builder(
+              builder: (context) {
+                final state = ref.watch(item.displayProvider!);
+
+                if (state is int && state > 0) {
+                  return Padding(
+                    padding: const EdgeInsets.fromLTRB(24, 0, 0, 0),
+                    child: Text(
+                      '$state',
+                      style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                            color: Theme.of(context).colorScheme.error,
+                            fontWeight: FontWeight.w600,
+                          ),
                     ),
-                  )
-                : Icon(item.iconData),
-            if (item.displayProvider != null)
-              Builder(
-                builder: (context) {
-                  final state = ref.watch(item.displayProvider!);
+                  );
+                }
 
-                  if (state is int && state > 0) {
-                    return Padding(
-                      padding: const EdgeInsets.fromLTRB(24, 0, 0, 0),
-                      child: Text(
-                        '$state',
-                        style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                              color: Theme.of(context).colorScheme.error,
-                              fontWeight: FontWeight.w600,
-                            ),
-                      ),
-                    );
-                  }
-
-                  return const SizedBox.shrink();
-                },
-              ),
-          ],
-        ),
-        label: item.displayTitle,
-      );
+                return const SizedBox.shrink();
+              },
+            ),
+        ],
+      ),
+      label: item.displayTitle,
+    );
+  }
 
   @override
   ConsumerState<NitBottomNavigationBar> createState() =>
@@ -119,12 +133,13 @@ class _MainNavigationBarState extends ConsumerState<NitBottomNavigationBar> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = widget.bottomNavigationBarTheme ??
+        Theme.of(context).bottomNavigationBarTheme;
     return BottomNavigationBarTheme(
-      data: widget.bottomNavigationBarTheme ??
-          Theme.of(context).bottomNavigationBarTheme,
+      data: theme,
       child: BottomNavigationBar(
         currentIndex: _currentIndex,
-        elevation: 0,
+        elevation: theme.elevation ?? 0,
         // backgroundColor: Theme.of(context).colorScheme.surfaceContainerLowest,
         // selectedLabelStyle: Theme.of(context).textTheme.bodySmall!.copyWith(
         //       color: Theme.of(context).colorScheme.secondary.withOpacity(0.50),
