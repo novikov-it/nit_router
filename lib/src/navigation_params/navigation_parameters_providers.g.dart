@@ -21,6 +21,8 @@ final navigationPathParametersProvider = Provider<Map<String, String>>.internal(
   allTransitiveDependencies: const <ProviderOrFamily>{},
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef NavigationPathParametersRef = ProviderRef<Map<String, String>>;
 String _$navigationExtraParameterHash() =>
     r'39ed24ead4c28b164edb25fcb5e8107339853f2a';
@@ -37,6 +39,8 @@ final navigationExtraParameterProvider = Provider<Object?>.internal(
   allTransitiveDependencies: const <ProviderOrFamily>{},
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef NavigationExtraParameterRef = ProviderRef<Object?>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
