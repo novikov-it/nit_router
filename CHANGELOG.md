@@ -1,3 +1,8 @@
+## 0.4.0
+Added additional customization to bottomNavigationBar
+Added manualRedirects param
+Added unique key to pageBuilder
+
 ## 0.3.2
 Added menuItemTap
 
