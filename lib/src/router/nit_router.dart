@@ -26,6 +26,10 @@ class NitRouter {
       BuildContext context,
       NavigationZoneRoute? route,
     )? redirect,
+    NavigationZoneRoute? Function(
+      BuildContext context,
+      GoRouterState state,
+    )? manualRedirect,
   }) {
     return GoRouter(
       navigatorKey: _routerKey,
@@ -46,23 +50,27 @@ class NitRouter {
                     ),
                   ),
             )
-            .expand(
-              (element) => element.toList(),
-            ),
+            .expand((element) => element),
       ],
       refreshListenable: refreshListenable,
-      redirect: redirect == null
-          ? null
-          : (context, state) {
-              final currentRoute = _getCurrentRoute(
-                state.uri,
-                navigationZones.expand((e) => e).toList(),
-              );
+      redirect: (context, state) {
+        if (manualRedirect != null) {
+          final route = manualRedirect(context, state);
+          if (route != null) return route.routePath;
+        }
 
-              final res = redirect(context, currentRoute)?.routePath;
+        if (redirect != null) {
+          final currentRoute = _getCurrentRoute(
+            state.uri,
+            navigationZones.expand((e) => e),
+          );
 
-              return res;
-            },
+          final res = redirect(context, currentRoute)?.routePath;
+
+          return res;
+        }
+        return null;
+      },
     );
   }
 
@@ -91,10 +99,7 @@ class NitRouter {
       routes: zones
           .map((zone) => zone
               .where((e) => e.descriptor.parent == route)
-              .map(
-                (e) => _buildRoute(e, zones),
-              )
-              .toList())
+              .map((e) => _buildRoute(e, zones)))
           .expand((x) => x)
           .toList(),
     );
@@ -102,7 +107,7 @@ class NitRouter {
 
   static _getCurrentRoute(
     Uri currentUri,
-    List<NavigationZoneRoute> navigationRoutes,
+    Iterable<NavigationZoneRoute> navigationRoutes,
   ) {
     final urlSections = currentUri.toString().split('?')[0].split('/');
     final currentRoute = navigationRoutes.firstWhere(
