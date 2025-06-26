@@ -1,3 +1,6 @@
+## 0.3.2
+Added menuItemTap
+
 ## 0.3.1
 Added navigationPathParametersProvider and navigationExtraParameterProvider to module exports
 

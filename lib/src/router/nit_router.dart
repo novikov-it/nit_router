@@ -74,6 +74,8 @@ class NitRouter {
       path: route.routePath,
       name: route.name,
       pageBuilder: (context, state) => MaterialPage(
+        key: ValueKey(
+            '${route.name}-${state.fullPath}'), // ← без этого не ребилдится при обновлении через pushReplacement
         child: ProviderScope(
           overrides: [
             navigationPathParametersProvider.overrideWithValue(
