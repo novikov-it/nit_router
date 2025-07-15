@@ -1,3 +1,6 @@
+## 0.5.0
+Some fixes and previous changes
+
 ## 0.4.0
 Added additional customization to bottomNavigationBar
 Added manualRedirects param

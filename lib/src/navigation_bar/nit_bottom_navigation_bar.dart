@@ -103,8 +103,10 @@ class _MainNavigationBarState extends ConsumerState<NitBottomNavigationBar> {
     super.didChangeDependencies();
 
     if (mounted) {
+      final uri = GoRouter.of(context).routerDelegate.currentConfiguration.uri;
       final urlSections =
-          GoRouterState.of(context).uri.toString().split('?')[0].split('/');
+          // GoRouterState.of(context).
+          uri.toString().split('?')[0].split('/');
       _currentIndex = widget.menuItems.indexWhere((element) {
         if (element.route == null) return false;
 
