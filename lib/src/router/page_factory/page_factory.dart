@@ -8,7 +8,7 @@ typedef PageFactory = Page<dynamic> Function(
   Widget child,
 );
 
-/// Появление по material design
+/// Appearance of material design
 Page<dynamic> materialPageFactory(
   NavigationZoneRoute route,
   BuildContext context,
@@ -21,7 +21,7 @@ Page<dynamic> materialPageFactory(
   );
 }
 
-/// Плавное появление (fade)
+/// Smooth appearance (fade)
 Page<dynamic> fadePageFactory(
   NavigationZoneRoute route,
   BuildContext context,
@@ -37,7 +37,7 @@ Page<dynamic> fadePageFactory(
   );
 }
 
-/// Сдвиг справа -> влево (slide)
+/// Slide from right to left
 Page<dynamic> slideFromRightPageFactory(
   NavigationZoneRoute route,
   BuildContext context,
