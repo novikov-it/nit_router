@@ -1,10 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:go_router/go_router.dart';
+import 'package:nit_router/nit_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import '../navigation_zones/navigation_zone_route.dart';
-import '../redirects/redirects_state_model.dart';
-import '../widgets/not_found_page.dart';
-import 'nit_router.dart';
 
 part 'nit_router_state.g.dart';
 
@@ -20,6 +17,7 @@ class NitRouterState extends _$NitRouterState {
       BuildContext context,
       GoRouterState state,
     )? manualRedirect,
+    PageFactory pageFactory = materialPageFactory,
   }) {
     final redirects =
         redirectsProvider != null ? ref.watch(redirectsProvider) : null;
@@ -33,6 +31,7 @@ class NitRouterState extends _$NitRouterState {
       initialLocation:
           _previousRouter?.routerDelegate.currentConfiguration.uri.toString(),
       manualRedirect: manualRedirect,
+      pageFactory: pageFactory,
       redirect: (context, route) {
         return redirects?.redirects[route];
       },

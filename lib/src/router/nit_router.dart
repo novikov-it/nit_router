@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:nit_router/src/router/page_factory/page_factory.dart';
 
 import '../navigation_params/navigation_parameters_providers.dart';
 import '../navigation_zones/navigation_zone_route.dart';
@@ -30,6 +31,7 @@ class NitRouter {
       BuildContext context,
       GoRouterState state,
     )? manualRedirect,
+    required PageFactory pageFactory,
   }) {
     return GoRouter(
       navigatorKey: _routerKey,
@@ -47,6 +49,7 @@ class NitRouter {
                     (route) => _buildRoute(
                       route,
                       navigationZones,
+                      pageFactory: pageFactory,
                     ),
                   ),
             )
@@ -76,15 +79,14 @@ class NitRouter {
 
   static GoRoute _buildRoute(
     NavigationZoneRoute route,
-    List<List<NavigationZoneRoute>> zones,
-  ) {
+    List<List<NavigationZoneRoute>> zones, {
+    required PageFactory pageFactory,
+  }) {
     return GoRoute(
       path: route.routePath,
       name: route.name,
-      pageBuilder: (context, state) => MaterialPage(
-        key: ValueKey(
-            '${route.name}-${state.fullPath}'), // ← без этого не ребилдится при обновлении через pushReplacement
-        child: ProviderScope(
+      pageBuilder: (context, state) {
+        final child = ProviderScope(
           overrides: [
             navigationPathParametersProvider.overrideWithValue(
               state.pathParameters,
@@ -94,12 +96,14 @@ class NitRouter {
             ),
           ],
           child: route.descriptor.page,
-        ),
-      ),
+        );
+
+        return pageFactory(route, context, state, child);
+      },
       routes: zones
           .map((zone) => zone
               .where((e) => e.descriptor.parent == route)
-              .map((e) => _buildRoute(e, zones)))
+              .map((e) => _buildRoute(e, zones, pageFactory: pageFactory)))
           .expand((x) => x)
           .toList(),
     );

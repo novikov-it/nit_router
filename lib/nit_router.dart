@@ -12,5 +12,6 @@ export 'src/navigation_zones/navigation_zone_route.dart';
 export 'src/redirects/redirects_state_model.dart';
 export 'src/router/nit_router.dart';
 export 'src/router/nit_router_state.dart';
+export 'src/router/page_factory/page_factory.dart';
 export 'src/widgets/fade_transition_page.dart';
 export 'src/widgets/not_found_page.dart';
