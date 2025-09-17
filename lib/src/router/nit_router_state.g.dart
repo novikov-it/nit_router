@@ -6,7 +6,7 @@ part of 'nit_router_state.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$nitRouterStateHash() => r'037989d874f31c82a752e75a86362b7620fe997e';
+String _$nitRouterStateHash() => r'37d51e3cc9368f97f7b1fffb86a6c3c382d7c1c1';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -34,11 +34,16 @@ abstract class _$NitRouterState extends BuildlessAutoDisposeNotifier<GoRouter> {
   late final Provider<RedirectsStateModel>? redirectsProvider;
   late final NavigationZoneRoute? Function(BuildContext, GoRouterState)?
       manualRedirect;
+  late final Page<dynamic> Function(
+      NavigationZoneRoute, BuildContext, GoRouterState, Widget) pageFactory;
 
   GoRouter build({
     required List<List<NavigationZoneRoute>> navigationZones,
     Provider<RedirectsStateModel>? redirectsProvider,
     NavigationZoneRoute? Function(BuildContext, GoRouterState)? manualRedirect,
+    Page<dynamic> Function(
+            NavigationZoneRoute, BuildContext, GoRouterState, Widget)
+        pageFactory = materialPageFactory,
   });
 }
 
@@ -56,11 +61,15 @@ class NitRouterStateFamily extends Family<GoRouter> {
     required List<List<NavigationZoneRoute>> navigationZones,
     Provider<RedirectsStateModel>? redirectsProvider,
     NavigationZoneRoute? Function(BuildContext, GoRouterState)? manualRedirect,
+    Page<dynamic> Function(
+            NavigationZoneRoute, BuildContext, GoRouterState, Widget)
+        pageFactory = materialPageFactory,
   }) {
     return NitRouterStateProvider(
       navigationZones: navigationZones,
       redirectsProvider: redirectsProvider,
       manualRedirect: manualRedirect,
+      pageFactory: pageFactory,
     );
   }
 
@@ -72,6 +81,7 @@ class NitRouterStateFamily extends Family<GoRouter> {
       navigationZones: provider.navigationZones,
       redirectsProvider: provider.redirectsProvider,
       manualRedirect: provider.manualRedirect,
+      pageFactory: provider.pageFactory,
     );
   }
 
@@ -98,11 +108,15 @@ class NitRouterStateProvider
     required List<List<NavigationZoneRoute>> navigationZones,
     Provider<RedirectsStateModel>? redirectsProvider,
     NavigationZoneRoute? Function(BuildContext, GoRouterState)? manualRedirect,
+    Page<dynamic> Function(
+            NavigationZoneRoute, BuildContext, GoRouterState, Widget)
+        pageFactory = materialPageFactory,
   }) : this._internal(
           () => NitRouterState()
             ..navigationZones = navigationZones
             ..redirectsProvider = redirectsProvider
-            ..manualRedirect = manualRedirect,
+            ..manualRedirect = manualRedirect
+            ..pageFactory = pageFactory,
           from: nitRouterStateProvider,
           name: r'nitRouterStateProvider',
           debugGetCreateSourceHash:
@@ -115,6 +129,7 @@ class NitRouterStateProvider
           navigationZones: navigationZones,
           redirectsProvider: redirectsProvider,
           manualRedirect: manualRedirect,
+          pageFactory: pageFactory,
         );
 
   NitRouterStateProvider._internal(
@@ -127,12 +142,15 @@ class NitRouterStateProvider
     required this.navigationZones,
     required this.redirectsProvider,
     required this.manualRedirect,
+    required this.pageFactory,
   }) : super.internal();
 
   final List<List<NavigationZoneRoute>> navigationZones;
   final Provider<RedirectsStateModel>? redirectsProvider;
   final NavigationZoneRoute? Function(BuildContext, GoRouterState)?
       manualRedirect;
+  final Page<dynamic> Function(
+      NavigationZoneRoute, BuildContext, GoRouterState, Widget) pageFactory;
 
   @override
   GoRouter runNotifierBuild(
@@ -142,6 +160,7 @@ class NitRouterStateProvider
       navigationZones: navigationZones,
       redirectsProvider: redirectsProvider,
       manualRedirect: manualRedirect,
+      pageFactory: pageFactory,
     );
   }
 
@@ -153,7 +172,8 @@ class NitRouterStateProvider
         () => create()
           ..navigationZones = navigationZones
           ..redirectsProvider = redirectsProvider
-          ..manualRedirect = manualRedirect,
+          ..manualRedirect = manualRedirect
+          ..pageFactory = pageFactory,
         from: from,
         name: null,
         dependencies: null,
@@ -162,6 +182,7 @@ class NitRouterStateProvider
         navigationZones: navigationZones,
         redirectsProvider: redirectsProvider,
         manualRedirect: manualRedirect,
+        pageFactory: pageFactory,
       ),
     );
   }
@@ -176,7 +197,8 @@ class NitRouterStateProvider
     return other is NitRouterStateProvider &&
         other.navigationZones == navigationZones &&
         other.redirectsProvider == redirectsProvider &&
-        other.manualRedirect == manualRedirect;
+        other.manualRedirect == manualRedirect &&
+        other.pageFactory == pageFactory;
   }
 
   @override
@@ -185,6 +207,7 @@ class NitRouterStateProvider
     hash = _SystemHash.combine(hash, navigationZones.hashCode);
     hash = _SystemHash.combine(hash, redirectsProvider.hashCode);
     hash = _SystemHash.combine(hash, manualRedirect.hashCode);
+    hash = _SystemHash.combine(hash, pageFactory.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -202,6 +225,10 @@ mixin NitRouterStateRef on AutoDisposeNotifierProviderRef<GoRouter> {
   /// The parameter `manualRedirect` of this provider.
   NavigationZoneRoute? Function(BuildContext, GoRouterState)?
       get manualRedirect;
+
+  /// The parameter `pageFactory` of this provider.
+  Page<dynamic> Function(
+      NavigationZoneRoute, BuildContext, GoRouterState, Widget) get pageFactory;
 }
 
 class _NitRouterStateProviderElement
@@ -218,6 +245,10 @@ class _NitRouterStateProviderElement
   @override
   NavigationZoneRoute? Function(BuildContext, GoRouterState)?
       get manualRedirect => (origin as NitRouterStateProvider).manualRedirect;
+  @override
+  Page<dynamic> Function(
+          NavigationZoneRoute, BuildContext, GoRouterState, Widget)
+      get pageFactory => (origin as NitRouterStateProvider).pageFactory;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
